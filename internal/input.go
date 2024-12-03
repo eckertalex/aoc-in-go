@@ -79,6 +79,15 @@ func (i *Input) LinesSlice() ([]string, error) {
 	return lines, nil
 }
 
+func (i *Input) Text() (string, error) {
+	lines, err := i.LinesSlice()
+	if err != nil {
+		return "", err
+	}
+
+	return strings.Join(lines, ""), nil
+}
+
 func (i *Input) Ints() (<-chan int, error) {
 	ints := make(chan int)
 
