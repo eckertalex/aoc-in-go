@@ -1,15 +1,20 @@
-package main
+package day01
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"sort"
 	"strconv"
 	"strings"
 
-	input "github.com/eckertalex/aoc-in-go/internal"
+	input "github.com/eckertalex/aoc-in-go/internal/input"
 )
+
+type Solution struct{}
+
+func New() *Solution {
+	return &Solution{}
+}
 
 func abs(x int) int {
 	if x < 0 {
@@ -38,14 +43,14 @@ func splitLines(input *input.Input) ([]int, []int, error) {
 	for line := range input.Lines() {
 		fields := strings.Fields(line)
 		if len(fields) != 2 {
-			log.Println("Invalid line format:", line)
+			fmt.Println("Invalid line format:", line)
 			continue
 		}
 
 		l, errl := strconv.Atoi(fields[0])
 		r, errr := strconv.Atoi(fields[1])
 		if errl != nil || errr != nil {
-			log.Println("Error parsing numbers on line:", line)
+			fmt.Println("Error parsing numbers on line:", line)
 			continue
 		}
 
@@ -56,10 +61,10 @@ func splitLines(input *input.Input) ([]int, []int, error) {
 	return ls, rs, nil
 }
 
-func part1(input *input.Input) int {
+func (s *Solution) Part1(input *input.Input) string {
 	ls, rs, err := splitLines(input)
 	if err != nil {
-		log.Println("error splitting lines")
+		fmt.Println("error splitting lines")
 		os.Exit(1)
 	}
 
@@ -72,13 +77,13 @@ func part1(input *input.Input) int {
 		xs[i] = abs(ls[i] - rs[i])
 	}
 
-	return sum(xs)
+	return strconv.Itoa(sum(xs))
 }
 
-func part2(input *input.Input) int {
+func (s *Solution) Part2(input *input.Input) string {
 	ls, rs, err := splitLines(input)
 	if err != nil {
-		log.Println("error splitting lines")
+		fmt.Println("error splitting lines")
 		os.Exit(1)
 	}
 
@@ -93,10 +98,5 @@ func part2(input *input.Input) int {
 		xs = append(xs, l*count)
 	}
 
-	return sum(xs)
-}
-
-func main() {
-	fmt.Println(part1(input.FromFile()))
-	fmt.Println(part2(input.FromFile()))
+	return strconv.Itoa(sum(xs))
 }

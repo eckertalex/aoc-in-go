@@ -1,13 +1,18 @@
-package main
+package day03
 
 import (
 	"fmt"
-	"log"
 	"regexp"
 	"strconv"
 
-	input "github.com/eckertalex/aoc-in-go/internal"
+	input "github.com/eckertalex/aoc-in-go/internal/input"
 )
+
+type Solution struct{}
+
+func New() *Solution {
+	return &Solution{}
+}
 
 func mulitply(text string) int {
 	r := regexp.MustCompile(`\d{1,3}`)
@@ -15,20 +20,20 @@ func mulitply(text string) int {
 
 	x, err := strconv.Atoi(matches[0])
 	if err != nil {
-		log.Println(err)
+		fmt.Println(err)
 	}
 	y, err := strconv.Atoi(matches[1])
 	if err != nil {
-		log.Println(err)
+		fmt.Println(err)
 	}
 
 	return x * y
 }
 
-func part1(input *input.Input) int {
+func (s *Solution) Part1(input *input.Input) string {
 	text, err := input.Text()
 	if err != nil {
-		log.Println(err)
+		fmt.Println(err)
 	}
 
 	r := regexp.MustCompile(`mul\(\d{1,3},\d{1,3}\)`)
@@ -41,13 +46,13 @@ func part1(input *input.Input) int {
 		sum += product
 	}
 
-	return sum
+	return strconv.Itoa(sum)
 }
 
-func part2(input *input.Input) int {
+func (s *Solution) Part2(input *input.Input) string {
 	text, err := input.Text()
 	if err != nil {
-		log.Println(err)
+		fmt.Println(err)
 	}
 
 	r := regexp.MustCompile(`mul\(\d{1,3},\d{1,3}\)|do\(\)|don't\(\)`)
@@ -65,10 +70,5 @@ func part2(input *input.Input) int {
 		}
 	}
 
-	return sum
-}
-
-func main() {
-	fmt.Println(part1(input.FromFile()))
-	fmt.Println(part2(input.FromFile()))
+	return strconv.Itoa(sum)
 }

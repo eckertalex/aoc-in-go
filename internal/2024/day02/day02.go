@@ -1,14 +1,19 @@
-package main
+package day02
 
 import (
 	"fmt"
-	"log"
 	"math"
 	"strconv"
 	"strings"
 
-	input "github.com/eckertalex/aoc-in-go/internal"
+	input "github.com/eckertalex/aoc-in-go/internal/input"
 )
+
+type Solution struct{}
+
+func New() *Solution {
+	return &Solution{}
+}
 
 func splitLinesToInt2D(input *input.Input) [][]int {
 	var int2D [][]int
@@ -19,7 +24,7 @@ func splitLinesToInt2D(input *input.Input) [][]int {
 		for i, field := range fields {
 			n, err := strconv.Atoi(field)
 			if err != nil {
-				log.Println("Error parsing numbers on line:", line)
+				fmt.Println("Error parsing numbers on line:", line)
 				continue
 			}
 			row[i] = n
@@ -57,7 +62,7 @@ func remove(slice []int, index int) []int {
 	return append(cs[:index], cs[index+1:]...)
 }
 
-func part1(input *input.Input) int {
+func (s *Solution) Part1(input *input.Input) string {
 	reports := splitLinesToInt2D(input)
 
 	safeCount := 0
@@ -67,10 +72,10 @@ func part1(input *input.Input) int {
 		}
 	}
 
-	return safeCount
+	return strconv.Itoa(safeCount)
 }
 
-func part2(input *input.Input) int {
+func (s *Solution) Part2(input *input.Input) string {
 	reports := splitLinesToInt2D(input)
 
 	safeCount := 0
@@ -89,10 +94,5 @@ func part2(input *input.Input) int {
 		}
 	}
 
-	return safeCount
-}
-
-func main() {
-	fmt.Println(part1(input.FromFile()))
-	fmt.Println(part2(input.FromFile()))
+	return strconv.Itoa(safeCount)
 }

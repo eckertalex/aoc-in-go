@@ -2,8 +2,8 @@ package input
 
 import (
 	"bufio"
+	"fmt"
 	"io"
-	"log"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -16,21 +16,21 @@ type Input struct {
 	lines   chan string
 }
 
-func FromFile() *Input {
-	_, caller, _, ok := runtime.Caller(1)
+func FromFile(year, day int) (*Input, error) {
+	_, callerFile, _, ok := runtime.Caller(1)
 	if !ok {
-		log.Println("Failed to determine input path")
-		os.Exit(1)
+		return nil, fmt.Errorf("failed to determine input path")
 	}
 
-	path := filepath.Join(filepath.Dir(caller), "input.txt")
+	baseDir := filepath.Dir(filepath.Dir(callerFile))
+	path := filepath.Join(baseDir, "internal", fmt.Sprintf("%d", year), fmt.Sprintf("day%02d", day), "input.txt")
+
 	file, err := os.Open(path)
 	if err != nil {
-		log.Println("Failed to open file:", err)
-		os.Exit(1)
+		return nil, fmt.Errorf("failed to open input file %s: %w", path, err)
 	}
 
-	return newInputFromReader(file, file)
+	return newInputFromReader(file, file), nil
 }
 
 func FromLiteral(input string) *Input {
@@ -47,22 +47,18 @@ func newInputFromReader(reader io.Reader, closer io.Closer) *Input {
 		defer func() {
 			if closer != nil {
 				if err := closer.Close(); err != nil {
-					log.Printf("error closing reader: %v", err)
+					fmt.Fprintf(os.Stderr, "error closing reader: %v\n", err)
 				}
 			}
 		}()
-
 		for input.scanner.Scan() {
 			input.lines <- input.scanner.Text()
 		}
-
 		if err := input.scanner.Err(); err != nil {
-			log.Printf("scanner error: %v", err)
+			fmt.Fprintf(os.Stderr, "scanner error: %v\n", err)
 		}
-
 		close(input.lines)
 	}()
-
 	return input
 }
 
@@ -75,7 +71,6 @@ func (i *Input) LinesSlice() ([]string, error) {
 	for line := range i.Lines() {
 		lines = append(lines, line)
 	}
-
 	return lines, nil
 }
 
@@ -84,26 +79,27 @@ func (i *Input) Text() (string, error) {
 	if err != nil {
 		return "", err
 	}
-
-	return strings.Join(lines, ""), nil
+	return strings.Join(lines, "\n"), nil
 }
 
 func (i *Input) Ints() (<-chan int, error) {
 	ints := make(chan int)
-
 	go func() {
 		defer close(ints)
-
 		for line := range i.lines {
+			line = strings.TrimSpace(line)
+			if line == "" {
+				continue
+			}
+
 			value, err := strconv.Atoi(line)
 			if err != nil {
-				log.Printf("error converting line to int: %v", err)
+				fmt.Fprintf(os.Stderr, "error converting line to int: %v\n", err)
 				continue
 			}
 			ints <- value
 		}
 	}()
-
 	return ints, nil
 }
 
@@ -112,11 +108,9 @@ func (i *Input) IntsSlice() ([]int, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	var ints []int
 	for value := range intsChan {
 		ints = append(ints, value)
 	}
-
 	return ints, nil
 }
