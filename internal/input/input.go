@@ -114,3 +114,13 @@ func (i *Input) IntsSlice() ([]int, error) {
 	}
 	return ints, nil
 }
+
+func (i *Input) RuneMatrix() [][]rune {
+	var runeMatrix [][]rune
+
+	for line := range i.Lines() {
+		runeMatrix = append(runeMatrix, []rune(line))
+	}
+
+	return runeMatrix
+}

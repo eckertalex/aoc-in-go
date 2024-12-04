@@ -44,3 +44,4 @@ Here is a table summarizing the results for each day and part of the **Advent of
 | [Day 1](https://github.com/eckertalex/aoc-in-go/blob/main/internal/2024/day01/day01.go) | ⭐     | ⭐     |
 | [Day 2](https://github.com/eckertalex/aoc-in-go/blob/main/internal/2024/day02/day02.go) | ⭐     | ⭐     |
 | [Day 3](https://github.com/eckertalex/aoc-in-go/blob/main/internal/2024/day03/day03.go) | ⭐     | ⭐     |
+| [Day 4](https://github.com/eckertalex/aoc-in-go/blob/main/internal/2024/day04/day04.go) | ⭐     | ⭐     |
