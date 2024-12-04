@@ -20,28 +20,13 @@ type Solution interface {
 var runCmd = &cobra.Command{
 	Use:   "run",
 	Short: "Run a specific Advent of Code challenge",
-	RunE:  runChallenge,
+	Run: func(_ *cobra.Command, _ []string) {
+		err := runChallenge()
+		cobra.CheckErr(err)
+	},
 }
 
-func loadSolution(year, day int) (Solution, error) {
-	switch year {
-	case 2024:
-		switch day {
-		case 1:
-			return day01.New(), nil
-		case 2:
-			return day02.New(), nil
-		case 3:
-			return day03.New(), nil
-		default:
-			return nil, fmt.Errorf("no solution found for year %d, day %d", year, day)
-		}
-	default:
-		return nil, fmt.Errorf("no solutions found for year %d", year)
-	}
-}
-
-func runChallenge(cmd *cobra.Command, args []string) error {
+func runChallenge() error {
 	solution, err := loadSolution(year, day)
 	if err != nil {
 		return fmt.Errorf("failed to load solution: %v", err)
@@ -69,12 +54,23 @@ func runChallenge(cmd *cobra.Command, args []string) error {
 	fmt.Printf("%s in %v\n", result, elapsedTime)
 
 	err = util.CopyToClipboard(result)
-	if err != nil {
-		fmt.Println(err)
-	}
-	return nil
+	return err
 }
 
-func init() {
-	rootCmd.AddCommand(runCmd)
+func loadSolution(year, day int) (Solution, error) {
+	switch year {
+	case 2024:
+		switch day {
+		case 1:
+			return day01.New(), nil
+		case 2:
+			return day02.New(), nil
+		case 3:
+			return day03.New(), nil
+		default:
+			return nil, fmt.Errorf("no solution found for year %d, day %d", year, day)
+		}
+	default:
+		return nil, fmt.Errorf("no solutions found for year %d", year)
+	}
 }

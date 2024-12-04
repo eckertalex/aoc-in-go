@@ -18,20 +18,17 @@ var templateFS embed.FS
 var initCmd = &cobra.Command{
 	Use:   "init",
 	Short: "Initialize a new Advent of Code challenge for a given year and day",
-	RunE:  initChallenge,
+	Run: func(_ *cobra.Command, _ []string) {
+		err := initFiles(day, year)
+		cobra.CheckErr(err)
+	},
 }
 
-func initChallenge(cmd *cobra.Command, args []string) error {
-	initFiles(day, year)
-	return nil
-}
-
-func initFiles(day, year int) {
+func initFiles(day, year int) error {
 	dir := fmt.Sprintf("internal/%d/day%02d", year, day)
 	err := os.MkdirAll(dir, os.ModePerm)
 	if err != nil {
-		fmt.Println("Error creating directory:", err)
-		return
+		return fmt.Errorf("Error creating directory: %v", err)
 	}
 
 	err = initDayFile(dir, fmt.Sprintf("%02d", day))
@@ -50,6 +47,7 @@ func initFiles(day, year int) {
 	}
 
 	// modifyExistingFile("main.go", year, day)
+	return nil
 }
 
 func initInputFile(dir string) error {
@@ -141,7 +139,3 @@ func initTestFile(dir, day string) error {
 // 		fmt.Println("Error writing to file:", err)
 // 	}
 // }
-
-func init() {
-	rootCmd.AddCommand(initCmd)
-}
