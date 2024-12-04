@@ -6,7 +6,7 @@ import (
 	input "github.com/eckertalex/aoc-in-go/internal/input"
 )
 
-func TestDay1(t *testing.T) {
+func TestDay02(t *testing.T) {
 	data := `7 6 4 2 1
 1 2 7 8 9
 9 7 6 2 1
