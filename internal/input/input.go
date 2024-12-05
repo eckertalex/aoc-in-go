@@ -66,23 +66,20 @@ func (i *Input) Lines() <-chan string {
 	return i.lines
 }
 
-func (i *Input) LinesSlice() ([]string, error) {
+func (i *Input) LinesSlice() []string {
 	var lines []string
 	for line := range i.Lines() {
 		lines = append(lines, line)
 	}
-	return lines, nil
+	return lines
 }
 
-func (i *Input) Text() (string, error) {
-	lines, err := i.LinesSlice()
-	if err != nil {
-		return "", err
-	}
-	return strings.Join(lines, "\n"), nil
+func (i *Input) Text() string {
+	lines := i.LinesSlice()
+	return strings.Join(lines, "\n")
 }
 
-func (i *Input) Ints() (<-chan int, error) {
+func (i *Input) Ints() <-chan int {
 	ints := make(chan int)
 	go func() {
 		defer close(ints)
@@ -100,19 +97,16 @@ func (i *Input) Ints() (<-chan int, error) {
 			ints <- value
 		}
 	}()
-	return ints, nil
+	return ints
 }
 
-func (i *Input) IntsSlice() ([]int, error) {
-	intsChan, err := i.Ints()
-	if err != nil {
-		return nil, err
-	}
+func (i *Input) IntsSlice() []int {
+	intsChan := i.Ints()
 	var ints []int
 	for value := range intsChan {
 		ints = append(ints, value)
 	}
-	return ints, nil
+	return ints
 }
 
 func (i *Input) RuneMatrix() [][]rune {

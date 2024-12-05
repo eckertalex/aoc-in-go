@@ -31,14 +31,9 @@ func mulitply(text string) int {
 }
 
 func (s *Solution) Part1(input *input.Input) string {
-	text, err := input.Text()
-	if err != nil {
-		fmt.Println(err)
-	}
-
 	r := regexp.MustCompile(`mul\(\d{1,3},\d{1,3}\)`)
 
-	matches := r.FindAllString(text, -1)
+	matches := r.FindAllString(input.Text(), -1)
 
 	sum := 0
 	for _, match := range matches {
@@ -50,14 +45,9 @@ func (s *Solution) Part1(input *input.Input) string {
 }
 
 func (s *Solution) Part2(input *input.Input) string {
-	text, err := input.Text()
-	if err != nil {
-		fmt.Println(err)
-	}
-
 	r := regexp.MustCompile(`mul\(\d{1,3},\d{1,3}\)|do\(\)|don't\(\)`)
 
-	matches := r.FindAllString(text, -1)
+	matches := r.FindAllString(input.Text(), -1)
 
 	sum := 0
 	do := true
