@@ -28,7 +28,7 @@ func initFiles(day, year int) error {
 	dir := fmt.Sprintf("internal/%d/day%02d", year, day)
 	err := os.MkdirAll(dir, os.ModePerm)
 	if err != nil {
-		return fmt.Errorf("Error creating directory: %v", err)
+		return fmt.Errorf("error creating directory: %v", err)
 	}
 
 	err = initDayFile(dir, fmt.Sprintf("%02d", day))
