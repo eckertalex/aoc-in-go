@@ -10,6 +10,7 @@ import (
 	"github.com/eckertalex/aoc-in-go/internal/2024/day04"
 	"github.com/eckertalex/aoc-in-go/internal/2024/day05"
 	"github.com/eckertalex/aoc-in-go/internal/2024/day06"
+	"github.com/eckertalex/aoc-in-go/internal/2024/day07"
 	input "github.com/eckertalex/aoc-in-go/internal/input"
 	"github.com/eckertalex/aoc-in-go/internal/util"
 	"github.com/spf13/cobra"
@@ -76,6 +77,8 @@ func loadSolution(year, day int) (Solution, error) {
 			return day05.New(), nil
 		case 6:
 			return day06.New(), nil
+		case 7:
+			return day07.New(), nil
 		default:
 			return nil, fmt.Errorf("no solution found for year %d, day %d", year, day)
 		}
